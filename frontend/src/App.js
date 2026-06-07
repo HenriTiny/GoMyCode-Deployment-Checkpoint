@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 function App() {
     const apiUrl = process.env.REACT_APP_API_URL || '';
@@ -6,7 +6,7 @@ function App() {
     const [title, setTitle] = useState('');
     const [error, setError] = useState(null);
 
-    const loadTodos = async () => {
+    const loadTodos = useCallback(async () => {
         try {
             const response = await fetch(`${apiUrl}/api/todos`);
             const data = await response.json();
@@ -14,11 +14,11 @@ function App() {
         } catch (err) {
             setError('Unable to load todos');
         }
-    };
+    }, [apiUrl]);
 
     useEffect(() => {
         loadTodos();
-    }, []);
+    }, [loadTodos]);
 
     const handleAdd = async (event) => {
         event.preventDefault();
